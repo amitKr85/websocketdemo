@@ -15,6 +15,34 @@ function setConnected(connected) {
     }
     $("#greetings").html("");
 }
+
+function login() {
+    let uid = $("#userId").val();
+    // let data = qs.stringify({
+    //     'username': $("#userId").val(),
+    //     'password': "1234"
+    // });
+
+    fetch("http://localhost:8080/login", {
+        method: "POST",
+        body: `username=${uid}&password=1234`,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+        credentials: "include"
+
+    }).then((loginRes) => {
+        if (loginRes.status === 200) {
+            console.log("login success");
+        }
+        console.log(loginRes);
+
+    }).catch((loginError) => {
+        console.log("loginError ", loginError);
+    });
+}
+
 function logout() {
     const requestOptions = {
         method: "GET",
@@ -90,6 +118,7 @@ function showGreeting(message) {
 
 $(function () {
     $("form").on('submit', (e) => e.preventDefault());
+    $( "#login" ).click(() => login());
     $( "#logout" ).click(() => logout());
     $( "#connect" ).click(() => connect());
     $( "#disconnect" ).click(() => disconnect());

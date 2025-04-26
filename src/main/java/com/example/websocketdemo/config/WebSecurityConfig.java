@@ -9,10 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import java.util.List;
 
@@ -29,15 +27,24 @@ public class WebSecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(obj -> {})
-                .logout(obj -> obj.logoutSuccessUrl("/login"))
+                .formLogin(obj -> obj.successHandler((req, res, ex) -> {
+                            res.setStatus(HttpStatus.OK.value());
+                        })
+                        .failureHandler((req, res, ex) -> {
+                            res.setStatus(HttpStatus.UNAUTHORIZED.value());
+                        }))
+                .logout(obj -> obj.logoutSuccessHandler((req, res, auth) -> {
+                    res.setStatus(HttpStatus.OK.value());
+                }))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.GET, "/index.html").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/app.js").permitAll()
                         .anyRequest().authenticated())
                 .cors(corsCustomizer -> {
                     CorsConfigurationSource configurationSource = request -> {
                         CorsConfiguration corsConfiguration = new CorsConfiguration();
-                        corsConfiguration.setAllowedOrigins(List.of("http://localhost:8080","http://localhost:3000"));
-                        corsConfiguration.setAllowedMethods(List.of("POST","GET","OPTIONS"));
+                        corsConfiguration.setAllowedOrigins(List.of("http://localhost:8080", "http://localhost:3000"));
+                        corsConfiguration.setAllowedMethods(List.of("POST", "GET", "OPTIONS"));
                         corsConfiguration.setAllowCredentials(true);
                         return corsConfiguration;
                     };

@@ -14,24 +14,25 @@
     Javascript and reload this page!</h2></noscript>
 <div id="main-content" class="container">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <form class="form-inline">
                 <div class="form-group">
-                    <label for="connect">ChatRoom id:</label>
-                    <input type="text" id="chatroomId" class="form-control" placeholder="chatroom id here ...">
                     <input type="text" id="userId" class="form-control" placeholder="user id here ...">
-                    <button id="connect" class="btn btn-default" type="submit">Connect</button>
-                    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
-                    </button>
+                    <button id="login" class="btn btn-default" type="submit">Login</button>
                     <button id="logout" class="btn btn-default" type="submit">Logout</button>
+                    <input type="text" id="chatroomId" class="form-control" placeholder="chatroom id here ...">
+                    <button id="connect" class="btn btn-default" type="submit">Connect</button>
+                    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect</button>
                 </div>
             </form>
         </div>
+    </div>
+    <div class="row">
         <div class="col-md-6">
             <form class="form-inline">
                 <div class="form-group">
                     <label for="name">Message to send: </label>
-                    <input type="text" id="name" class="form-control" placeholder="Your name here...">
+                    <input type="text" id="name" class="form-control" placeholder="Your message here...">
                 </div>
                 <button id="send" class="btn btn-default" type="submit">Send</button>
             </form>
